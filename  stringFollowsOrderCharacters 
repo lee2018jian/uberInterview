@@ -1,0 +1,60 @@
+Check if string follows order of characters defined by a pattern or not | Set 3
+Given an input string and a pattern, check if characters in the input string follows the same order as determined by characters present in the pattern. Assume there won’t be any duplicate characters in the pattern.
+
+Examples:
+
+Input: string = "engineers rock", pattern = "er";
+Output: true
+All 'e' in the input string are before all 'r'.
+
+Input: string = "engineers rock", pattern = "egr";
+Output: false
+There are two 'e' after 'g' in the input string.
+
+Input: string = "engineers rock", pattern = "gsr";
+Output: false
+There are one 'r' before 's' in the input string.
+
+
+import java.util.*;
+
+public class StringPattern {
+	public boolean isPattern(String word,String pattern){
+		Map<Character, Integer> map = new HashMap<>();
+		for(int i = 0 ; i < pattern.length();i++){
+			map.put(pattern.charAt(i), 0);
+		}
+		int prevIndex = 0;
+		for(int i = 0 ; i < word.length();i++){
+			char cur = word.charAt(i);
+			if(map.containsKey(cur)){
+				if(map.get(cur)==0){
+					prevIndex++;
+					map.put(cur, prevIndex);
+				}
+				else{
+					if(map.get(cur)!=prevIndex){
+						return false;
+					}
+					
+				}
+			}
+		}
+		return true;
+	}
+	
+	public static void main(String[] args){
+		StringPattern sp = new StringPattern();
+		String word1 = "engineers rock";
+		String pattern1 = "er";
+		System.out.println(sp.isPattern(word1, pattern1));
+		
+		String word2 = "engineers rock";
+		String pattern2 = "egr";
+		System.out.println(sp.isPattern(word2, pattern2));
+		
+		String word3 = "engineers rock";
+		String pattern3 = "gsr";
+		System.out.println(sp.isPattern(word3, pattern3));
+	}
+}

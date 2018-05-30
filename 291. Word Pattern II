@@ -1,0 +1,62 @@
+291. Word Pattern II
+
+public class Solution {
+    Map<Character, String> map = new HashMap<Character, String>(); //keep map of pattern and word
+    Set<String> words = new HashSet<String>(); //keep list of word visited
+    public boolean wordPatternMatch(String pattern, String str) {
+  
+        if(pattern.length()==0&&str.length()==0)  //if pattern and str both are empty, pattern matches str
+        {
+            return true;
+        }
+        
+        //if both pattern and str are not empty, continue matching.
+        if(pattern.length()>0&&str.length()>0){
+            char c = pattern.charAt(0);
+            if(map.get(c)!=null){  //if this char has a str matching
+                if(str.startsWith(map.get(c))){  //continue with sub problem
+                    return wordPatternMatch(pattern.substring(1),str.substring(map.get(c).length()));
+                }
+            } else {
+                for(int i=1;i<=str.length();i++){  //this char can match any substring from 0 to 1 to 0 to end
+                    String newword=str.substring(0,i);
+                    if(words.contains(newword)){  //this the new word already been visited, skip
+                        continue;
+                    }
+                    map.put(c,newword);
+                    words.add(newword);
+                    boolean r = wordPatternMatch(pattern.substring(1),str.substring(map.get(c).length()));
+                    if(r) return true; //if this new mapping works, return true, otherwise continue mataching
+                    map.remove(c);
+                    words.remove(newword);
+                }
+            }
+        }
+        return false;
+    }
+}
+
+
+
+public boolean wordPattern(String pattern, String str) {
+    if (pattern == null || str == null) {
+        return false;
+    }
+    char[] patterns = pattern.toCharArray();
+    String[] strs = str.split(" ");
+    if (patterns.length != strs.length) {
+        return false;
+    }
+    Map<Character, String> map = new HashMap<Character, String>();
+    for (int i=0; i<patterns.length; i++) {
+        if (map.containsKey(patterns[i])) {
+            if (!map.get(patterns[i]).equals(strs[i])) {
+                return false;
+            }
+        } else if (map.containsValue(strs[i])) {
+            return false;
+        }
+        map.put(patterns[i], strs[i]);
+    }
+    return true;
+}

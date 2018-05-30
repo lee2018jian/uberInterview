@@ -1,0 +1,78 @@
+418. Sentence Screen Fitting
+
+Input:
+rows = 2, cols = 8, sentence = ["hello", "world"]
+
+Output: 
+1
+
+Explanation:
+hello---
+world---
+
+The character '-' signifies an empty space on the screen.
+
+
+public int wordsTyping(String[] sentence, int rows, int cols) {
+       String s = String.join(" ", sentence) + " ";
+        int start = 0, l = s.length();
+        for (int i = 0; i < rows; i++) {
+            start += cols;
+            if (s.charAt(start % l) == ' ') {
+                start++;
+            } else {
+                while (start > 0 && s.charAt((start-1) % l) != ' ') {
+                    start--;
+                }
+            }
+        }
+        
+        return start / s.length(); 
+    }
+
+=============
+简化版 
+
+For example:
+
+Input: "John is planning to move to Seattle after getting a new job there.", 20
+
+Output: 
+John is planning to 
+move to Seattle
+after getting a new
+job there.
+
+
+public class Main {
+    public void print(String s, int w) {
+        if (s.length() < w) {
+            System.out.println(s);
+            return;
+        }
+        int start = 0;
+        while (start < s.length()) {
+            int end = start + w;
+            if (end >= s.length()) {
+                System.out.println(s.substring(start));
+                return;
+            } else {
+                if (s.charAt(end) == ' ') {
+                    System.out.println(s.substring(start, end));
+                    start = end + 1;
+                } else {
+                    while (end > start && s.charAt(end-1) != ' ') {
+                        end--;
+                    }
+                    System.out.println(s.substring(start, end));
+                    start = end;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String in = "John is planning to move to Seattle after getting a new job there.";
+        new Main().print(in, 20);
+    }
+}

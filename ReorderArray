@@ -1,0 +1,44 @@
+import java.util.*;
+import java.util.Map.Entry;
+
+//数组重拍 count多的放在后面，相同count，数字小的放在前面
+//e.g. [1,2,1,1,2,3,3] -> [2,2,3,3,1,1,1]
+
+//1. countMap <num, count>
+//2. loop countMap, make smaller number first
+public class ReorderArray {
+	static int[] reOrgArray(int[] input){
+		Map<Integer,Integer> countMap = new HashMap<>();
+		PriorityQueue<Map.Entry<Integer,Integer>> orderMap = new PriorityQueue<>((a,b)->
+		a.getValue()==b.getValue() ? a.getKey()-b.getKey(): a.getValue()-b.getValue());
+		
+		for(int num:input){
+			countMap.put(num, countMap.getOrDefault(num, 0)+1);
+		}
+		
+		for(Entry<Integer, Integer> map:countMap.entrySet()){
+			orderMap.add(map);
+		}
+		int[] result = new int[input.length];
+		int index = 0;
+		while(!orderMap.isEmpty()){
+			Map.Entry<Integer, Integer> cur = orderMap.poll();
+			int key = cur.getKey();
+			int count = cur.getValue();
+			while(count-->0){
+			  result[index++]=key;
+			}
+		}
+		return result;
+		
+	}
+	
+	public static void main(String[] args){
+		int[] input = {1,2,1,1,2,3,3};
+		int[] result = new int[input.length];
+		result = reOrgArray(input);
+		for(int num:result){
+			System.out.print(num+" ");
+		}
+	}
+}
